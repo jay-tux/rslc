@@ -1,5 +1,5 @@
 CC=g++
-CXXFLAGS=-std=c++17 -Wall -Wextra -pedantic -MMD -g -c
+CXXFLAGS=-std=c++17 -Wall -Wextra -pedantic -MMD -g -c -Iinc/
 LIBFLAGS=-fPIC
 LIBLDFLAGS=-shared
 LDFLAGS=-L./bin/ -lrslc

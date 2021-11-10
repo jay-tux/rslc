@@ -1,3 +1,4 @@
 .ccls-cache/*
 bin/*
 obj/*
+compile_flags.txt

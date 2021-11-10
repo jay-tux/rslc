@@ -1,4 +1,4 @@
-#include "../../inc/rslc.hpp"
+#include "rslc.hpp"
 
 using namespace rslc;
 using namespace rslc::lexer;
@@ -11,19 +11,19 @@ template <typename LT, typename... Args> LT &lazy_init(Args... args) {
 }
 
 token_stream &compiler::run_lexer() const {
-  token_stream &res = lazy_init<token_stream>();
-  // do lexer stuff
+  // prepare arguments; from flags & args
+  token_stream &res = lazy_init<token_stream, std::istream &>(this->source);
   return res;
 }
 
 ast &compiler::run_syntax_analysis(lexer::token_stream &stream) const {
+  // prepare arguments; from flags & args
   ast &res = lazy_init<ast>();
-  // do syntax stuff
   return res;
 }
 
 codestream &compiler::run_code_generator(syntax::ast &ast) const {
+  // prepare arguments; from flags & args
   codestream &res = lazy_init<codestream>();
-  // do code generation stuff
   return res;
 }

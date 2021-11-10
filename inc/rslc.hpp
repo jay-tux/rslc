@@ -7,13 +7,13 @@
 #include <string>
 #include <vector>
 
-#include "int/codegen/generator.hpp"
-#include "int/enums.hpp"
-#include "int/error.hpp"
-#include "int/lexer/lexer.hpp"
-#include "int/syntax/syntax.hpp"
+#include "lib/codegen/generator.hpp"
+#include "lib/enums.hpp"
+#include "lib/error.hpp"
+#include "lib/lexer/lexer.hpp"
+#include "lib/syntax/syntax.hpp"
 
-#include "int/data/defaults.hpp"
+#include "lib/data/defaults.hpp"
 
 /*!
  *  RSLC main namespace.
