@@ -17,6 +17,15 @@ public:
     return strm;
   }
 
+  template <typename Fun> void visit_all(Fun f) {
+    token t = extract();
+    while (!std::holds_alternative<token_eof>(t)) {
+      // f(t);
+      std::visit([&f, &t](auto &v) { f(v, t); }, t);
+      t = extract();
+    }
+  }
+
 private:
   std::istream &src;
   size_t line;
