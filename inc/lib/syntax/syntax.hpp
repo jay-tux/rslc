@@ -12,7 +12,16 @@ namespace syntax {
 class ast {
 public:
   inline ast() : root{nullptr}, at{nullptr} {}
-  void add_node(lexer::token t);
+
+  inline void add_node(lexer::token t) {
+    if (this->at == nullptr)
+      this->root = std::make_unique<node>(nullptr, t);
+    else {
+      this->at->children.emplace_back(nullptr, t);
+      this->at = &*this->at->children.rbegin();
+    }
+  }
+
   inline void to_parent() {
     if (at == nullptr || at->parent == nullptr)
       return;
@@ -23,8 +32,8 @@ public:
 
 private:
   std::unique_ptr<node> root;
-  node *at;
-}; // ast
+  node *at; // nullable reference
+};          // ast
 } // namespace syntax
 } // namespace rslc
 
