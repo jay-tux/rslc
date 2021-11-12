@@ -2,6 +2,7 @@
 #define _RSLC_LEXER_TOKEN
 
 #include <iostream>
+#include <regex>
 #include <string>
 #include <variant>
 
@@ -13,7 +14,7 @@ public:
   inline Self &_impl() { return static_cast<Self &>(*this); }
   inline const std::string name() const { return Self::name; }
   inline const std::string content() const { return _content; }
-  inline const size_t lineno() const { return _lineno; }
+  inline size_t lineno() const { return _lineno; }
   friend Self;
 
 private:
@@ -64,8 +65,50 @@ struct token_invalid : token_base<token_invalid> {
   inline const static std::string name = "TOKEN_INVALID";
 };
 
+struct token_literal : token_base<token_literal> {
+  using value_t = std::variant<long, float>;
+  inline token_literal(long value, int lineno)
+      : token_base(std::to_string(value), lineno), value{value} {}
+  inline token_literal(float value, int lineno)
+      : token_base(std::to_string(value), lineno), value{value} {}
+
+  value_t value;
+  inline const static std::string name = "TOKEN_LITERAL";
+  inline const static std::regex regex_int = std::regex("-?[0-9]+");
+  inline const static std::regex regex_flt =
+      std::regex("-?[0-9]+([\\.][0-9]+)?");
+};
+
+struct token_directive : token_base<token_directive> {
+  inline token_directive(std::string cont, int lineno)
+      : token_base(cont, lineno) {}
+
+  inline const static std::string name = "TOKEN_DIRECTIVE";
+};
+
+struct token_operator : token_base<token_operator> {
+  inline token_operator(std::string cont, int lineno)
+      : token_base(cont, lineno) {}
+
+  static inline bool is_op_char(const char c) {
+    return (c == '+' || c == '-' || c == '*' || c == '/' || c == '<' ||
+            c == '>' || c == '!' || c == '=' || c == '&' || c == '|' ||
+            c == '~');
+  }
+
+  static inline bool is_operator(const std::string c) {
+    return (c == "+" || c == "-" || c == "*" || c == "/" || c == "/" ||
+            c == "&&" || c == "||" || c == "<<" || c == ">>" || c == "<=" ||
+            c == ">=" || c == ">" || c == "<" || c == "==" || c == "!=" ||
+            c == "&" || c == "|" || c == "^" || c == "~");
+  }
+
+  inline const static std::string name = "TOKEN_OPERATOR";
+};
+
 using token = std::variant<token_brace, token_text, token_colon, token_comma,
-                           token_bracket, token_eof, token_invalid>;
+                           token_bracket, token_eof, token_invalid,
+                           token_literal, token_directive, token_operator>;
 
 inline std::ostream &operator<<(std::ostream &s, token &t) {
   std::visit(
