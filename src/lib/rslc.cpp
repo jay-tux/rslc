@@ -19,6 +19,7 @@ token_stream &compiler::run_lexer() const {
 ast &compiler::run_syntax_analysis(lexer::token_stream &stream) const {
   // prepare arguments; from flags & args
   ast &res = lazy_init<ast>();
+  res.from_lexer(stream);
   return res;
 }
 
