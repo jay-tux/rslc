@@ -10,9 +10,9 @@ int main(int argc, const char **argv) {
   rslc::compiler c(src);
   auto strm = c.run_lexer();
   auto ast = std::move(c.run_syntax_analysis(strm));
-
   rslc::Logger::get() << rslc::Logger::ready(rslc::LOG_DEBUG, "MAIN")
                       << "Compiler Finished" << rslc::Logger::endl;
 
+  std::cout << std::endl;
   return 0;
 }
